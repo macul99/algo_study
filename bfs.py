@@ -51,3 +51,80 @@ while True:
                 if a[y] == 0:
                     a[y] = a[x] + 1
                     Q.append(y)
+
+
+#### another applcation for solving Hackerank chanllege: Red Knight's Shortest Path
+from collections import deque
+
+def printShortestPath():
+    import sys
+    data = sys.stdin.read().strip().split()
+    if not data:
+        return
+    it = iter(data)
+    n = int(next(it))
+    # visited + store move used to reach this cell
+    visited = [[False]*n for _ in range(n)]
+    moves = [[None]*n for _ in range(n)]
+
+    xi = int(next(it)); yi = int(next(it))
+    xf = int(next(it)); yf = int(next(it))
+
+    # (x, y, distance, move_name_taken_to_get_here)
+    q = deque()
+    q.append((xi, yi, 0, "empty"))
+
+    cnt = -1
+
+    # Directions: (dx, dy, label)
+    dirs = [
+        (-2, -1, "UL"),
+        (-2,  1, "UR"),
+        ( 0,  2, "R"),
+        ( 2,  1, "LR"),
+        ( 2, -1, "LL"),
+        ( 0, -2, "L"),
+    ]
+
+    while q:
+        x, y, dist, mv = q.popleft()
+
+        if x < 0 or x >= n or y < 0 or y >= n:
+            continue
+        if visited[x][y]:
+            continue
+
+        visited[x][y] = True
+        moves[x][y] = mv
+
+        if x == xf and y == yf:
+            cnt = dist
+            break
+
+        for dx, dy, label in dirs:
+            q.append((x + dx, y + dy, dist + 1, label))
+
+    if cnt == -1:
+        print("Impossible")
+        return
+
+    print(cnt)
+    # Reconstruct path
+    path = []
+    x, y = xf, yf
+    while moves[x][y] != "empty":
+        mv = moves[x][y]
+        path.append(mv)
+        if mv == "UL":
+            x += 2; y += 1
+        elif mv == "UR":
+            x += 2; y -= 1
+        elif mv == "LR":
+            x -= 2; y -= 1
+        elif mv == "LL":
+            x -= 2; y += 1
+        elif mv == "R":
+            y -= 2
+        elif mv == "L":
+            y += 2
+    print(" ".join(reversed(path)))
