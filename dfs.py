@@ -89,3 +89,38 @@ def solve():
                 min_diff = d
 
     print(min_diff)
+
+
+### another example to solve Hankerank chanllenge 'Roads and Libraries'
+def roadsAndLibraries(n, c_lib, c_road, cities):
+    adj = [[] for _ in range(n + 1)]
+    for _, (a, b) in enumerate(cities):
+        adj[a].append(b)
+        adj[b].append(a)
+
+    visited = [False]*(n + 1)
+
+    # If building a library everywhere is cheaper or equal than a road
+    if c_lib <= c_road:
+        return c_lib * n
+
+    def dfs(start):
+        stack = [start]
+        count = 0
+        visited[start] = True
+        while stack:
+            u = stack.pop()
+            count += 1
+            for v in adj[u]:
+                if not visited[v]:
+                    visited[v] = True
+                    stack.append(v)
+        return count
+
+    cost = 0
+    for node in range(1, n + 1):
+        if not visited[node]:
+            size = dfs(node)
+            # One library + (size-1) roads (since c_road < c_lib here)
+            cost += c_lib + (size - 1) * c_road
+    return cost
