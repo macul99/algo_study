@@ -3,6 +3,45 @@
 # dfs() show how dfs works
 # solve() is the best solution since only travel through the graph once
 
+
+'''
+Compare BFS and DFS
+
+Key differences BFS vs DFS:
+
+Strategy
+BFS: Level by level (all neighbors first).
+DFS: Deep along one branch before backtracking.
+Data structure
+BFS: Queue (FIFO).
+DFS: Stack (implicit via recursion or explicit stack).
+Path / optimality
+BFS: Finds shortest path (minimum edges) in unweighted graphs.
+DFS: Does not guarantee shortest path.
+Memory usage (typical)
+BFS: Can hold an entire layer (can be large: O(width)).
+DFS: Stores just the current path + branching (O(depth)).
+When it terminates early
+BFS: Good if target is near the start.
+DFS: Better if target is likely deep and branching factor is large early.
+Use cases
+BFS: Shortest paths in unweighted graphs, level order, finding connected components breadth stats.
+DFS: Topological sort, cycle detection, detecting articulation points/bridges, backtracking puzzles.
+Traversal order example (graph: 1 connected to 2,3; 2 to 4; 3 to 5):
+BFS from 1: 1, 2, 3, 4, 5
+DFS (one possible): 1, 2, 4, 3, 5
+Completeness / termination
+BFS: Complete (will find a solution if one exists in finite graph).
+DFS: May get stuck in deep/inf loops without visited or depth limit.
+Weighted graphs
+Neither handles weights; for weighted shortest paths you use Dijkstra (non-negative) or others.
+Complexity (both)
+
+Time: O(V + E)
+Space: BFS O(V) worst; DFS O(V) worst but often smaller in practice if depth << breadth.
+Summary: BFS explores broadly to guarantee shortest unweighted paths; DFS dives deep for structural analysis and backtracking tasks.
+'''
+
 def dfs(root, graph, visited):
     member = [root]
     stack = [root]
