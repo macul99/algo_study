@@ -163,3 +163,48 @@ def roadsAndLibraries(n, c_lib, c_road, cities):
             # One library + (size-1) roads (since c_road < c_lib here)
             cost += c_lib + (size - 1) * c_road
     return cost
+
+'''
+Make use BFS and DFS at the same time
+Hankerank test: Journey to the Moon
+'''
+def journeyToMoon(n, astronaut):
+    checked = [0]*n
+    links = [[] for i in range(n)] # trees
+    for a in astronaut: # build up trees
+        links[a[0]].append(a[1])
+        links[a[1]].append(a[0])
+
+    groups = [] # size for each group
+
+    for i, lk in enumerate(links):
+        if checked[i] == 0:
+            checked[i] = 1
+            if len(lk) == 0: # single node, group of size 1
+                groups.append(1)
+                continue
+            groups.append(1) # new group
+            stack = lk[::-1] # BFS - put all linked nodes into stack
+            while stack:
+                node = stack.pop()
+                if checked[node] == 0:
+                    checked[node] = 1
+                    groups[-1] += 1
+
+                for nxt in links[node]: # DFS - put all linked nodes of child into stack
+                    if checked[nxt] == 0:
+                        stack.append(nxt)
+                        checked[nxt] = 1
+                        groups[-1] += 1
+
+    # calculate pairs based on group sizes
+    if len(groups) <=1:
+        return 0
+    
+    # if group size is a, b, c, d; total pairs = a*(b+c+d) + b*(c+d) + c*(d)
+    csum = [0]
+    for i in groups[::-1][:-1]:
+        csum.append(csum[-1] + i)
+
+    return sum([a*b for a,b in zip(groups[:-1], csum[::-1][:-1])])
+    
