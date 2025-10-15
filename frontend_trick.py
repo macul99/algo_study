@@ -11,3 +11,6 @@
 # flex box
 # display: flex
 # justify-content: center/end/space-around
+
+# coolors.co # color and hex code
+
