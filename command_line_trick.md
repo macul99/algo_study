@@ -52,6 +52,32 @@ sed 's/a/z/' team* > new_team.txt
 sed -i 's/a/z/' team* # Bash
 sed -i '' 's/a/z/' team* # zsh (mac)
 
+## count
+wc [filename] # word count, output is an array of [num_of_line, num_of_words, num_of_bytes]
+wc -l # num of line
+wc -w # num of words
+wc -c # num of bytes
+wc -m # num of characters
+
+# sort file content
+sort [option] [filename]
+option:
+-r # reverse order
+-n # sort numbers
+
+# remove ADJACENT duplicated lines
+unique [filename]
+## to remove non-adjacent duplcated lines, sort the content first
+sort team_members.txt | uniq
+
+
+
+
+
+
+
+
+
 
 
 
