@@ -17,8 +17,13 @@ print(datetime.now().timestamp(), datetime.now(timezone.utc).timestamp())
 print(datetime.now(ZoneInfo('Asia/Singapore')).timestamp(), datetime.now(ZoneInfo('UTC')).timestamp())
 # Use astimezone() to convert timezone, timestamp remain the same
 print(datetime.now().astimezone(ZoneInfo("UTC")).timestamp()==datetime.now().astimezone(ZoneInfo("Asia/Singapore")).timestamp())
-# Use replace() to set new timezone without convertion, timestamp will change
+# Use replace() to set new timezone without convertion, localtime remain the same, but timestamp will change
 print(datetime.now().replace(tzinfo=ZoneInfo("UTC")).timestamp()==datetime.now().replace(tzinfo=ZoneInfo("Asia/Singapore")).timestamp())
+# Conversion from datetime to/from string
+datetime.strptime("2025-10-31 17:45:32", "%Y-%m-%d %H:%M:%S"), datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+# dt attribute
+dt=datetime.now()
+(dt.date(), dt.time(), dt.year, dt.monty, dt.day, dt.hour, dt.minute, dt.second, dt.weekday())
 
 print(datetime.now().timestamp()==datetime.now(timezone.utc).timestamp())
 print(datetime.now().hour==datetime.now(timezone.utc).hour)
@@ -33,6 +38,11 @@ print(pd.to_datetime(datetime.now()).timestamp(), pd.to_datetime(datetime.now(ti
 print(pd.to_datetime(datetime.now()).tz_localize('Asia/Singapore').timestamp(), pd.to_datetime(datetime.now(timezone.utc)).timestamp())
 #### !!!! Localized with WRONG TZ, then timestamp is not the SAME !!!!! ##########
 print(pd.to_datetime(datetime.now()).tz_localize('Asia/Jakarta').timestamp(), pd.to_datetime(datetime.now(timezone.utc)).timestamp())
+# Conversion from datetime to/from string
+pd.to_datetime('2025-10-31', format='%Y-%m-%d'), pd.Timestamp.now(tz=ZoneInfo("Asia/Singapore")).strftime("%Y-%m-%d %H:%M:%S")
+# dt attribute
+dt=pd.Timestamp.now()
+(dt.date(), dt.time(), dt.year, dt.monty, dt.day, dt.hour, dt.minute, dt.second, dt.weekday())
 
 ################### CONCLUSION ########################
 # datetime always tz aware even simply call datetime.now()
