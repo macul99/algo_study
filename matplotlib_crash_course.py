@@ -49,6 +49,9 @@ g.map(sns.scatterplot, "total_bill", "tip")
 tips.groupby('sex')[['total_bill', 'tip']].sum().plot(kind='bar', stacked=True)
 plt.show()
 
+tips.boxplot(column='total_bill', by='sex')
+plt.show()
+
 tsla[['close', 'Adjusted Close']].loc["2016":].plot(figsize=(12, 8), subplots = True)
 plt.show()
 
