@@ -82,6 +82,10 @@ plt.show()
 
 fig, axes = plt.subplots(1, 2, figsize=(10, 5))
 # axes[0], axes[1]
+monthly_power = [solar_data[solar_data['month'] == i]['power_mw'].values for i in range(1, 13)]
+bp = axes[0].boxplot(monthly_power, labels=range(1, 13), patch_artist=True)
+for patch in bp['boxes']:
+    patch.set_facecolor('lightblue')
 
 fig, axes = plt.subplots(2, 2, figsize=(10, 5))
 # axes[0, 0], axes[0, 1], axes[1, 0], axes[1, 1]
