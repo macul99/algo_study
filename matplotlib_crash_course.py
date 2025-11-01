@@ -93,3 +93,34 @@ ax11 = fig.add_subplot(221)
 ax12 = fig.add_subplot(222)
 ax21 = fig.add_subplot(223)
 ax22 = fig.add_subplot(224)
+
+### Double y-axis
+x = np.linspace(0, 10, 200)
+y_left = np.sin(x) # left y-axis data
+y_right = 0.1 * np.exp(x/3) # right y-axis data
+
+fig, ax = plt.subplots()
+
+Left axis
+color_left = 'tab:blue'
+ax.plot(x, y_left, color=color_left, label='sin(x)')
+ax.set_xlabel('x')
+ax.set_ylabel('Left: sin(x)', color=color_left)
+ax.tick_params(axis='y', labelcolor=color_left)
+ax.spines['left'].set_color(color_left)
+
+Right axis
+ax2 = ax.twinx() # shares x with ax
+color_right = 'tab:red'
+ax2.plot(x, y_right, color=color_right, label='0.1*exp(x/3)')
+ax2.set_ylabel('Right: exp scale', color=color_right)
+ax2.tick_params(axis='y', labelcolor=color_right)
+ax2.spines['right'].set_color(color_right)
+
+Combined legend
+lines = ax.get_lines() + ax2.get_lines()
+labels = [l.get_label() for l in lines]
+ax.legend(lines, labels, loc='upper left')
+
+plt.tight_layout()
+plt.show()
