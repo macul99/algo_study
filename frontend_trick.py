@@ -1,7 +1,7 @@
 # how to center an item in a webpage
 # 1. display: block;
 # 2. set width of the item
-# 3. set margin-left and margin-right to auto
+# 3. set margin-left and margin-right to auto, such as margin: 0 auto;
 
 # margin controls the space outside an element
 # padding controls the space inside an element
@@ -66,6 +66,39 @@ a:hover, a:focus {
 p{
     color: red !important;
 }
+
+
+# block element vs. inline element vs. inline-block elements
+block elements stack on top of each other, <div>, <p>, <h1> are all block elements
+can set height and margin top&btm
+
+inline elements site side by side, <span>, <a> are inline elememts
+cannot set height or margin top/btm for inline elements
+
+inline-block elements site side by side and can set height and margin top/btm
+<button> and <input> are inline-block elements
+
+can change inline elements to "display: inline-block;" to make it inline-block elements
+
+# multiple class to single element
+we can specify multiple class names for an element by using space to seperate class names
+
+# flex-wrap: wrap/nowrap/wrapreverse
+auto wrap the elements just like text wrap
+
+# CSS overflow
+overflow: visible/hidden/scroll/auto
+overflow-x:hidden and overflow-y:visible DON'T work together
+overflow-x:hidden and overflow-y:scroll DO work together
+
+# CSS float: image float with text such as what in word doc
+# work together with 'clear'
+float: left/right
+clear: left/right/both
+display: float-root # put image float inside the container where this display property is set
+
+
+
 
 
 
