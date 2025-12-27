@@ -10,3 +10,8 @@
 <img src="formular_3_proof_4.png" alt="proof" width="50%">
 <img src="formular_3_proof_5.png" alt="proof" width="50%">
 
+
+### Reparameterization Trick
+<img src="reparameterization_track_1.png" alt="proof" width="50%">
+<img src="reparameterization_track_2.png" alt="proof" width="50%">
+<img src="reparameterization_track_3.png" alt="proof" width="50%">
