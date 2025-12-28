@@ -14,4 +14,5 @@
 ### Reparameterization Trick
 <img src="reparameterization_track_1.png" alt="proof" width="50%">
 <img src="reparameterization_track_2.png" alt="proof" width="50%">
+reparameterization trick fomular will be used to substitute x0 in equation (7) of the paper to get u(xt, x0) as in equation (10)
 <img src="reparameterization_track_3.png" alt="proof" width="50%">
