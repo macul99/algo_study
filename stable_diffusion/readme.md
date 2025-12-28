@@ -12,6 +12,8 @@
 <img src="formular_3_proof_5.png" alt="proof" width="50%">
 
 ### Proof of Equation (5)
+- Note, by condition on X0, equation 5 is tractable!
+
 <img src="proof_equation_5.png" alt="proof" width="50%">
 
 
