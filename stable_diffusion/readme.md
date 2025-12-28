@@ -27,9 +27,19 @@ as shown in below step, we find sigma first, then followed by miu
 <img src="proof_equation_7_4.png" alt="proof" width="50%">
 
 
-
 ### Reparameterization Trick
 <img src="reparameterization_track_1.png" alt="proof" width="50%">
 <img src="reparameterization_track_2.png" alt="proof" width="50%">
 reparameterization trick fomular will be used to substitute x0 in equation (7) of the paper to get u(xt, x0) as in equation (10)
-<img src="reparameterization_track_3.png" alt="proof" width="50%">
+
+
+### transition from Equation 7 to the actual training objective equation (12)
+<img src="training_objective_1.png" alt="proof" width="50%">
+<img src="training_objective_2.png" alt="proof" width="50%">
+
+
+### The Sampling Loop (Algorithm 2)
+<img src="algo_2_1.png" alt="proof" width="50%">
+<img src="algo_2_2.png" alt="proof" width="50%">
+<img src="algo_2_3.png" alt="proof" width="50%">
+
