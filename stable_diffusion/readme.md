@@ -16,6 +16,17 @@
 
 <img src="proof_equation_5.png" alt="proof" width="50%">
 
+### Proof of Equation (7)
+<img src="proof_equation_7_1.png" alt="proof" width="50%">
+<img src="proof_equation_7_2.png" alt="proof" width="50%">
+
+-Note: we need to find miu and sigma of x_t-1 which is (x-miu)^2/sigma = x^2/sigma-2*miu*x/sigma
+as shown in below step, we find sigma first, then followed by miu
+
+<img src="proof_equation_7_3.png" alt="proof" width="50%">
+<img src="proof_equation_7_4.png" alt="proof" width="50%">
+
+
 
 ### Reparameterization Trick
 <img src="reparameterization_track_1.png" alt="proof" width="50%">
