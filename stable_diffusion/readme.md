@@ -39,6 +39,7 @@ reparameterization trick fomular will be used to substitute x0 in equation (7) o
 
 
 ### The Sampling Loop (Algorithm 2)
+<img src="algo_1_and_2.png" alt="proof" width="50%">
 <img src="algo_2_1.png" alt="proof" width="50%">
 <img src="algo_2_2.png" alt="proof" width="50%">
 <img src="algo_2_3.png" alt="proof" width="50%">
