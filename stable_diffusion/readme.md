@@ -1,7 +1,7 @@
 # Study Stable Diffusion
 
 ### Background Formular
-<img src="ddpm_background_formular.png" alt="background_formular" width="50%">
+<img src="./images/ddpm_background_formular.png" alt="background_formular" width="50%">
 <img src="equation_5_to_7.png" alt="background_formular" width="50%">
 
 ### Proof of Equation (3)
