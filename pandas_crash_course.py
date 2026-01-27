@@ -29,6 +29,23 @@ df.assign(C=lambda x: x["A"] + x["B"], D=lambda x: x["A"] + x["C"])
 # check empty dataframe
 df.empty
 
+## Selection or Setting
+# selection by label df.loc(), df.at()
+df.loc[idx[0]] # select one row
+df.loc[:, 'a'] # select one col as Series
+df.loc[:, ['a']] # select one or more columns as DataFrame
+df.loc[0:10, ['a', 'b']] # label slicing
+df.loc[0, 'a'] == df.at[0, 'a'] # return a scalar
+df.at[0, 'a'] = 100
+
+## df.convert_dtypes() ds.convert_dtypes() # convert input data to proper dtypes by correctly handling pd.NA values
+# very useful for reading dataset from IO. Otherwise, the datatype may be 'object'.
+
+## df.to_numpy(), ds.to_numpy()
+## df.describe()
+## df.info()
+## df.value_counts()
+
 ## Binary Operation df.sub/add/mul/div
 row = df.iloc[1]
 df.sub(row, axis=1)
@@ -60,35 +77,14 @@ df.apply(subtract_and_divide, args=(5,), divide=3)
 # use Series method
 df.apply(pd.Series.interpolate)
 
-
-
-
-
-## df.convert_dtypes() ds.convert_dtypes() # convert input data to proper dtypes by correctly handling pd.NA values
-# very useful for reading dataset from IO. Otherwise, the datatype may be 'object'.
-
-## df.to_numpy(), ds.to_numpy()
-## df.describe()
-## df.info()
-## df.value_counts()
-
-## Selection or Setting
-# selection by label df.loc(), df.at()
-df.loc[idx[0]] # select one row
-df.loc[:, 'a'] # select one col as Series
-df.loc[:, ['a']] # select one or more columns as DataFrame
-df.loc[0:10, ['a', 'b']] # label slicing
-df.loc[0, 'a'] == df.at[0, 'a'] # return a scalar
-df.at[0, 'a'] = 100
-
-
-## df.agg(func=None, axis=0, *args, **kwargs)
-# func can be function or function name string or list of fun/fun_name
+## Aggregation API
+# df.agg(func=None, axis=0, *args, **kwargs)
+# func can be function or function name string or list of fun/fun_name, same as apply() if using single function
 # *args, **kwargs are passed to func
 # return scalar (Series.agg called with single function), Series (DF.agg called with single function) or DataFrame (DF.agg called with multiple functions)
-df.agg({'A' : ['sum', 'min'], 'B' : ['min', 'max']})
-df.agg(['sum', 'min'])
-df.agg(x=('A', 'max'), y=('B', 'min'), z=('C', 'mean'))
+df.agg({'A' : ['sum', 'min'], 'B' : ['min', 'max']}) # return df with full columns and 3 rows ['sum', 'min', 'max']
+df.agg(['sum', 'min']) # return df with full columns and two rows ['sum', 'min']
+df.agg(x=('A', 'max'), y=('B', 'min'), z=('C', 'mean')) # return a dataframe of 3 columns ['A', 'B', 'C'] and 3 rows [x, y, z] with plenty of NA
 
 ## df.transform(func=None, axis=0, *args, **kwargs) - can used with GroupBy
 # func can be function or function name string or list of fun/fun_name
