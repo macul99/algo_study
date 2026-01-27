@@ -10,6 +10,29 @@ pd.DataFrame({'a':1, 'b':[1,2]}, index=[0, 1])
 ## df.convert_dtypes() ds.convert_dtypes() # convert input data to proper dtypes by correctly handling pd.NA values
 # very useful for reading dataset from IO. Otherwise, the datatype may be 'object'.
 
+## df.to_numpy()
+## df.describe()
+## df.info()
+## df.value_counts()
+
+## Selection or Setting
+# selection by label df.loc(), df.at()
+df.loc[idx[0]] # select one row
+df.loc[:, 'a'] # select one col as Series
+df.loc[:, ['a']] # select one or more columns as DataFrame
+df.loc[0:10, ['a', 'b']] # label slicing
+df.loc[0, 'a'] == df.at[0, 'a'] # return a scalar
+df.at[0, 'a'] = 100
+
+
+
+# selection by position df.iloc(), df.iat()
+df.iloc[3] # select one row
+df.iloc[:, 0] # return a Series
+df.iloc[0:3, 2:5] # slicing
+df.iloc[[1,2], [1,3]]
+df.iloc[0, 1] = df.iat[0, 1]
+
 ## df.drop_duplicates(subset=['a'])
 
 ## df.drop()
@@ -63,8 +86,9 @@ df.replace(r"\s*\.\s*", np.nan, regex=True)
 df.where(df>0, -df) # cond is the same shape of original df, replace based on each element of the condition
 df.where(df['a']>0, -df) # cond is a series, replace the whole row
 
-# df.sort_values(['a'], ascending, key, ignore_index)
-
+## sorting
+df.sort_values(['a'], ascending, key, ignore_index)
+df.sort_index(axis, ascending)
 
 ### Series
 # Series of String
