@@ -82,11 +82,18 @@ df.apply(pd.Series.interpolate)
 # func can be function or function name string or list of fun/fun_name, same as apply() if using single function
 # *args, **kwargs are passed to func
 # return scalar (Series.agg called with single function), Series (DF.agg called with single function) or DataFrame (DF.agg called with multiple functions)
+df.agg({"A": "mean", "B": "sum"}) # return a Series with index ['A', 'B']
 df.agg({'A' : ['sum', 'min'], 'B' : ['min', 'max']}) # return df with full columns and 3 rows ['sum', 'min', 'max']
 df.agg(['sum', 'min']) # return df with full columns and two rows ['sum', 'min']
 df.agg(x=('A', 'max'), y=('B', 'min'), z=('C', 'mean')) # return a dataframe of 3 columns ['A', 'B', 'C'] and 3 rows [x, y, z] with plenty of NA
+# custom describe()
+from functools import partial
+q_25 = partial(pd.Series.quantile, q=0.25)
+q_25.__name__ = "25%"
+df.agg(["count", "mean", "std", "min", q_25, "median", q_75, "max"])
 
-## df.transform(func=None, axis=0, *args, **kwargs) - can used with GroupBy
+## Transform API
+# df.transform(func=None, axis=0, *args, **kwargs) - can used with GroupBy
 # func can be function or function name string or list of fun/fun_name
 # *args, **kwargs are passed to func
 # return A DataFrame that must have the same length as self
