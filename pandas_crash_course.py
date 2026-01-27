@@ -1,5 +1,12 @@
 ### Based on Pandas 2.3
 
+## create Series
+pd.Series([], index=[])
+
+## create DataFrame
+pd.DataFrame(2d-array # shape of (r, c), columns=['a', 'b'], index=[])
+pd.DataFrame({'a':1, 'b':[1,2]}, index=[0, 1])
+
 ## df.convert_dtypes() ds.convert_dtypes() # convert input data to proper dtypes by correctly handling pd.NA values
 # very useful for reading dataset from IO. Otherwise, the datatype may be 'object'.
 
@@ -41,6 +48,15 @@ df.bfill(limit=3)
 ## df.interpolate(method) ds.interpolate(method) # fillna by interpolation, methods = ["linear", "quadratic", "cubic", "barycentric", "phcip", "akima"]
 df.interpolate(method='spine', order=2)
 df.interpolate(method='polynomial', order=2)
+# Interpolating new observations from expanding data with Series.reindex()
+ser = pd.Series(np.sort(np.random.uniform(size=100)))
+new_index = ser.index.union(pd.Index([49.25, 49.5, 49.75, 50.25, 50.5, 50.75]))
+interp_s = ser.reindex(new_index).interpolate(method="pchip")
+
+## df.replace(), ds.replace()
+# used similarly as fillna()
+# replace string
+df.replace(r"\s*\.\s*", np.nan, regex=True)
 
 ## df.where(cond, other) # replace with 'other' value if not meeting 'cond', opposite of df.mask()
 ## df.mask(cond, other) # repalce with 'other' value if meeting 'cond'
