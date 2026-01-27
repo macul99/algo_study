@@ -2,15 +2,72 @@
 
 ## create Series
 pd.Series([], index=[])
+d = {"a": 0.0, "b": 1.0, "c": 2.0}
+pd.Series(d, index=["b", "c", "d", "a"])
+pd.Series(5.0, index=["a", "b", "c", "d", "e"])
+# Read Series item - dict like
+ds['a']
+ds.get('a')
+# name and rename
+ds.name
+ds.rename(new_name)
+# recommend to use .array/.to_numpy() rather than .values
+# .array return ExtensionArray; .to_numpy() return np.array
 
 ## create DataFrame
 pd.DataFrame(2d-array # shape of (r, c), columns=['a', 'b'], index=[])
 pd.DataFrame({'a':1, 'b':[1,2]}, index=[0, 1])
+# deletion - Columns can be deleted or popped like with a dict
+del df["two"]
+three = df.pop("three")
+# insert new column
+df.insert(1, "bar", df["one"]) # 2nd column named 'bar'
+# assign new column in method chains, always return a new copied dataframe
+df.assign(sepal_ratio=df["SepalWidth"] / df["SepalLength"])
+df.assign(sepal_ratio=lambda x: (x["SepalWidth"] / x["SepalLength"]))
+df.assign(C=lambda x: x["A"] + x["B"], D=lambda x: x["A"] + x["C"])
+# check empty dataframe
+df.empty
+
+## Binary Operation df.sub/add/mul/div
+row = df.iloc[1]
+df.sub(row, axis=1)
+col # ds of single index same as the 2nd level index of df
+df.sub(col, axis=0, level=2) # for multiple index
+
+## Compare dataframes or series
+# index needs to be in the same order for equality to be True
+df.equals(df1) will treat NA as equal
+df==df1 will treat NA as non-equal
+
+## Combine two dataframe, use 2nd df to fillna of first one
+df.combine_first(df1)
+
+## method chain of 3rd party function which return dataframe
+def a(df, p1) ->; def b(p1, df)->df
+Old style: b(p1='ho', a(df, p1='hi'))
+Recommended: df.pipe(a, p1='hi').pipe((b, "df"), 'ho')
+
+## Row or column-wise function application
+# df.apply(lambda, axis) # return Series or DataFrame
+df.apply(lambda x: np.mean(x)) # return Series
+df.apply(np.exp) # return DataFrame
+df.apply(lambda x: x.idxmax()) # get idx of max value happened for each column
+# pass additional arguments and keyword arguments
+def subtract_and_divide(x, sub, divide=1):
+    return (x - sub) / divide
+df.apply(subtract_and_divide, args=(5,), divide=3)
+# use Series method
+df.apply(pd.Series.interpolate)
+
+
+
+
 
 ## df.convert_dtypes() ds.convert_dtypes() # convert input data to proper dtypes by correctly handling pd.NA values
 # very useful for reading dataset from IO. Otherwise, the datatype may be 'object'.
 
-## df.to_numpy()
+## df.to_numpy(), ds.to_numpy()
 ## df.describe()
 ## df.info()
 ## df.value_counts()
@@ -24,6 +81,19 @@ df.loc[0:10, ['a', 'b']] # label slicing
 df.loc[0, 'a'] == df.at[0, 'a'] # return a scalar
 df.at[0, 'a'] = 100
 
+
+## df.agg(func=None, axis=0, *args, **kwargs)
+# func can be function or function name string or list of fun/fun_name
+# *args, **kwargs are passed to func
+# return scalar (Series.agg called with single function), Series (DF.agg called with single function) or DataFrame (DF.agg called with multiple functions)
+df.agg({'A' : ['sum', 'min'], 'B' : ['min', 'max']})
+df.agg(['sum', 'min'])
+df.agg(x=('A', 'max'), y=('B', 'min'), z=('C', 'mean'))
+
+## df.transform(func=None, axis=0, *args, **kwargs) - can used with GroupBy
+# func can be function or function name string or list of fun/fun_name
+# *args, **kwargs are passed to func
+# return A DataFrame that must have the same length as self
 
 
 # selection by position df.iloc(), df.iat()
