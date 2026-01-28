@@ -263,10 +263,13 @@ pd.concat([df1, ds1], axis=1) # concat df with Series, add col
 ### pivot
 ### df.pivot(index, columns, values) # all parameters can be single value or a list
 <img src="pandas_pivot.png" width="75%">
-
 df.pivot(index=["A","B"], columns="D", values="C") # multilevel index
 df.pivot(index="C", columns=["A","B"], values="D") # multilevel column
 df.pivot(index="C", columns="D", values=["A","B"]) # multilevel column
+
+### pd.pivot_table
+pd.pivot_table(df, values="D", index=["B"], columns=["A", "C"], aggfunc=np.sum)
+pd.pivot_table(df, values="D", index=pd.Grouper(freq="M", key="F"), columns="C") # can use *Grouper* for index and columns
 
 ## stack
 ### column name become a column
@@ -279,5 +282,55 @@ df.stack() # need to set index properly first
 <img src="pandas_unstack1.png" width="75%">
 <img src="pandas_unstack0.png" width="75%">
 df.unstack() # need to set index properly first
+
+## Tilting
+### pd.cut()
+c = pd.cut(ages, bins=3) # c is Categories type
+pd.cut([25, 20, 50], bins=c.categories) # Categories type can be used to set bins
+
+## Exploding
+df['values'].explode() # return a Series
+df.explode('values') # return a DataFrame
+
+## GroupBy - Split-Apply-Combine
+for i, g in df.groupby(['a','b'])
+### Grouping DataFrame with Index levels and columns
+df.groupby([pd.Grouper(level=1), "A"])
+### Groupby column selection
+df['c'].groupby(df['A']) equivalent to df.groupby['A']['c']
+### Get a group
+grouped.get_group("bar")
+### Group without index for agg
+df.groupby(["A", "B"], as_index=False).sum()
+df.groupby(["A", "B"]).sum().reset_index()
+### Named agg - pd.NamedAgg or simple tuple
+animals.groupby("kind").agg(
+    min_height=pd.NamedAgg(column="height", aggfunc="min"),
+    max_height=pd.NamedAgg(column="height", aggfunc="max"),
+    average_weight=pd.NamedAgg(column="weight", aggfunc=np.mean),
+)
+animals.groupby("kind").agg(
+    min_height=("height", "min"),
+    max_height=("height", "max"),
+    average_weight=("weight", np.mean),
+)
+### Filtration
+dff.groupby("B").filter(lambda x: len(x) > 2) # only keep filtered group
+dff.groupby("B").filter(lambda x: len(x) > 2, dropna=False) # filtered group will be filled with NA
+### Flexible apply
+apply can act as a reducer, transformer, or filter function, depending on exactly what is passed to it
+def f(group):
+    return pd.DataFrame({'original': group,
+                         'demeaned': group - group.mean()})
+grouped = df.groupby('A', group_keys=True)['C'] # group_keys=True will include group keys as index
+grouped.apply(f)
+### applied series to dataframe
+def f(x):
+    return pd.Series([x, x ** 2], index=["x", "x^2"])
+ds.apply(f) # return will be a dataframe with 2 columns 'x' and 'x^2'
+
+
+
+
 
 
