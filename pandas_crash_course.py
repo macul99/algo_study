@@ -28,6 +28,8 @@ df.assign(sepal_ratio=lambda x: (x["SepalWidth"] / x["SepalLength"]))
 df.assign(C=lambda x: x["A"] + x["B"], D=lambda x: x["A"] + x["C"])
 # check empty dataframe
 df.empty
+# df rename
+df.rename(columns={}, index={})
 
 ## Selection or Setting
 # selection by label df.loc(), df.at()
@@ -119,6 +121,26 @@ df.transform({"A": np.abs, "B": [lambda x: x + 1, "sqrt"]})
 s = pd.Series(["six", "seven", "six", "seven", "six"], index=["a", "b", "c", "d", "e"]
 t = pd.Series({"six": 6, "seven": 7})
 s.map(t) # return a Series with values=[6,7,6,7,6] and index=["a", "b", "c", "d", "e"]
+
+## Reindexing and altering labels
+# reindex() will check if the index is monotonically increasing
+# ds.reindex(method), df.reindex(index, columns, axis, method), will filled with NA for new index and columns
+ds.reindex(['a','b'])
+df.reindex(index=[0, 1, 2], columns=['a', 'b'], method='ffill'/'bfill'/'nearest') # method for how to fillna
+df.reindex(['a', 'b'], axis=1)
+
+## Aligning objects with each other
+# return a tuple of aligned two objects
+# join could be 'outer', 'inner', 'left', 'right'
+# ds.align(ds1, join), df.align(df1, join)
+
+## Iteration
+# Iter cols
+for col in df
+for col_name, series in df.items()
+# Iter rows
+for idx, ds in df.iterrows() # convert row to Series, lower compared to intertuples
+for idx, np-array in df.itertuples() # much faster than iterrows
 
 ## df.drop_duplicates(subset=['a'])
 
