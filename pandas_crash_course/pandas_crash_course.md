@@ -322,15 +322,26 @@ apply can act as a reducer, transformer, or filter function, depending on exactl
 def f(group):
     return pd.DataFrame({'original': group,
                          'demeaned': group - group.mean()})
-grouped = df.groupby('A', group_keys=True)['C'] # group_keys=True will include group keys as index
+grouped = df.groupby('A', group_keys=True)['C'] # group_keys=True will include group keys as index for *apply()* function
 grouped.apply(f)
 ### applied series to dataframe
 def f(x):
     return pd.Series([x, x ** 2], index=["x", "x^2"])
+s = pd.Series(np.random.rand(5))
 ds.apply(f) # return will be a dataframe with 2 columns 'x' and 'x^2'
 
 
-
+## Window Operation
+### Window function always followed by Agg function
+### If a time based offset is provided, the corresponding time based index must be monotonic
+### rolling(window, min_periods, center, closed='left','right','both','neither'). 'closed' is for including window edge
+ds.rolling(window=2, min_periods=1, center=True).sum()
+ds.rolling(window='2D').sum() # for datetime index
+s.rolling(window=4).apply(func, raw=True) # raw=True, so data will convert to np array and pass to func 
+df.rolling(window=2).sum()
+### Expanding window
+### An expanding window yields the value of an aggregation statistic with all the data available up to that point in time.
+### df.rolling(window=len(df), min_periods=1) equivalent to df.expanding(min_periods=1)
 
 
 
