@@ -10,13 +10,13 @@ ds['a']
 ds.get('a')
 # name and rename
 ds.name
-ds.rename(new_name)
+ds.rename(new_name, implace=True)
 # recommend to use .array/.to_numpy() rather than .values
 # .array return ExtensionArray; .to_numpy() return np.array
 
 ## create DataFrame
 pd.DataFrame(2d-array # shape of (r, c), columns=['a', 'b'], index=[])
-pd.DataFrame({'a':1, 'b':[1,2]}, index=[0, 1])
+pd.DataFrame({'a':1, 'b':[1,2]}, index=[0, 1]) # all 1 for col 'a'
 # deletion - Columns can be deleted or popped like with a dict
 del df["two"]
 three = df.pop("three")
@@ -38,6 +38,14 @@ df.loc[0:10, ['a', 'b']] # label slicing
 df.loc[0, 'a'] == df.at[0, 'a'] # return a scalar
 df.at[0, 'a'] = 100
 
+# selection by position df.iloc(), df.iat()
+df.iloc[3] # select one row
+df.iloc[:, 0] # return a Series
+df.iloc[0:3, 2:5] # slicing
+df.iloc[[1,2], [1,3]]
+df.iloc[0, 1] = df.iat[0, 1]
+
+
 ## df.convert_dtypes() ds.convert_dtypes() # convert input data to proper dtypes by correctly handling pd.NA values
 # very useful for reading dataset from IO. Otherwise, the datatype may be 'object'.
 
@@ -48,7 +56,7 @@ df.at[0, 'a'] = 100
 
 ## Binary Operation df.sub/add/mul/div
 row = df.iloc[1]
-df.sub(row, axis=1)
+df.sub(row, axis=1) # axis=1 for row, axis=0 for col
 col # ds of single index same as the 2nd level index of df
 df.sub(col, axis=0, level=2) # for multiple index
 
@@ -97,14 +105,20 @@ df.agg(["count", "mean", "std", "min", q_25, "median", q_75, "max"])
 # func can be function or function name string or list of fun/fun_name
 # *args, **kwargs are passed to func
 # return A DataFrame that must have the same length as self
+# with single function
+# df.transform(func) == func(df)
+df.transform(lambda x: x + np.max(x), axis=1)
+df.transform({"A": np.abs, "B": lambda x: x + 1})
+# with multiple functions, will return a column MultiIndexed DataFrame
+df.transform([np.abs, np.exp]) # cannot reduction function such as mean(), max()
+df.transform({"A": np.abs, "B": [lambda x: x + 1, "sqrt"]})
 
-
-# selection by position df.iloc(), df.iat()
-df.iloc[3] # select one row
-df.iloc[:, 0] # return a Series
-df.iloc[0:3, 2:5] # slicing
-df.iloc[[1,2], [1,3]]
-df.iloc[0, 1] = df.iat[0, 1]
+## ApplyMap API - elementwise functions
+# df.applymap(), ds.map()
+# ds.map can be used to 'map' values defined by 2nd Series
+s = pd.Series(["six", "seven", "six", "seven", "six"], index=["a", "b", "c", "d", "e"]
+t = pd.Series({"six": 6, "seven": 7})
+s.map(t) # return a Series with values=[6,7,6,7,6] and index=["a", "b", "c", "d", "e"]
 
 ## df.drop_duplicates(subset=['a'])
 
