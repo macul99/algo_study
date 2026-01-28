@@ -47,9 +47,29 @@ df.iloc[0:3, 2:5] # slicing
 df.iloc[[1,2], [1,3]]
 df.iloc[0, 1] = df.iat[0, 1]
 
+# Combining positional and label-based indexing
+df.loc[df.index[[0, 2]], 'A']
+df.iloc[[0, 2], df.columns.get_loc('A')]
+df.iloc[[0, 2], df.columns.get_indexer(['A', 'B'])] # multiple cols
+
+# accessing multi-level columns
+# df has two level column index: level 1: ['one', 'two'], level 2: ['first', 'second']
+df['one']['second'] # slow
+df.loc[:,('one','second')] # recommended
+
 
 ## df.convert_dtypes() ds.convert_dtypes() # convert input data to proper dtypes by correctly handling pd.NA values
 # very useful for reading dataset from IO. Otherwise, the datatype may be 'object'.
+
+## Select dtypes
+df.select_dtypes(include=['number', 'bool', 'object'], exclude=['unsignedinteger'])
+# check all dtypes
+def subdtypes(dtype):
+    subs = dtype.__subclasses__()
+    if not subs:
+        return dtype
+    return [dtype, [subdtypes(dt) for dt in subs]]
+subdtypes(np.generic)
 
 ## df.to_numpy(), ds.to_numpy()
 ## df.describe()
@@ -69,6 +89,7 @@ df==df1 will treat NA as non-equal
 
 ## Combine two dataframe, use 2nd df to fillna of first one
 df.combine_first(df1)
+df.update(df1) # will update non-na values as well
 
 ## method chain of 3rd party function which return dataframe
 def a(df, p1) ->; def b(p1, df)->df
@@ -204,6 +225,49 @@ df.sort_index(axis, ascending)
 ds.str.len() # return a series of the string len for each item, slower than df.apply(lambda x: len(x))
 ds.str.match(pattern)] # match regex pattern
 
+
+### IO Tools
+pd.read_csv(file_path, header=0, index_col=0)
+
+### Sampling
+#df.sample(n, frac, weight, random_state, axis)
+
+### Query
+df.query('(a>0) & (b>0)')
+df.query('index > 0') # query based on index
+df.query('color == "red"') # 'color' is one level of multi-level-index
+df.query('a in b and c not in d')
+df.query('a == ["1", "2", "3"]') # equivalent to df[df['a'].isin(["1", "2", "3"])]
+
+
+### Concatenate
+# vertically
+pd.concat([df1, df2], ignore_index=True)
+
+# based on dict of df
+pieces = {"x": df1, "y": df2, "z": df3}
+pd.concat(pieces) # result is multi-level index, with dict keys as level 1 index
+pd.concat(pieces, keys=["z", "y"]) # only for selected keys
+pd.concat([df1, s2.to_frame().T], ignore_index=True) # add row
+
+# horizontally
+pd.concat([df1, df2], axis=1)
+pd.concat([df1, df2.reindex(df1.index)], axis=1)
+pd.concat([df1, ds1], axis=1) # concat df with Series, add col
+
+### Merging
+# pd.merge(left_df, right_df, how='left/right/inner/outer/cross', on, left_on, right_on, left_index, right_index, validate)
+# if set 'validate' True, will check on duplicate keys before merging
+
+### Reshaping
+## pivot
+# df.pivot(index, columns, values) # all parameters can be single value or a list
+df.pivot(index=["A","B"], columns="D", values="C") # multilevel index
+df.pivot(index="C", columns=["A","B"], values="D") # multilevel column
+df.pivot(index="C", columns="D", values=["A","B"]) # multilevel column
+
+## stack
+# column name become a column
 
 
 
