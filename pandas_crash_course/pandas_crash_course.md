@@ -262,9 +262,22 @@ pd.concat([df1, ds1], axis=1) # concat df with Series, add col
 ## Reshaping
 ### pivot
 ### df.pivot(index, columns, values) # all parameters can be single value or a list
+<img src="pandas_pivot.png" width="75%">
+
 df.pivot(index=["A","B"], columns="D", values="C") # multilevel index
 df.pivot(index="C", columns=["A","B"], values="D") # multilevel column
 df.pivot(index="C", columns="D", values=["A","B"]) # multilevel column
 
 ## stack
-# column name become a column
+### column name become a column
+<img src="pandas_stack.png" width="75%">
+df.stack() # need to set index properly first
+
+## unstack
+### column become column names
+<img src="pandas_unstack.png" width="75%">
+<img src="pandas_unstack1.png" width="75%">
+<img src="pandas_unstack0.png" width="75%">
+df.unstack() # need to set index properly first
+
+
