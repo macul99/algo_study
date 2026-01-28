@@ -344,4 +344,28 @@ df.rolling(window=2).sum()
 ### df.rolling(window=len(df), min_periods=1) equivalent to df.expanding(min_periods=1)
 
 
+## Date Time Functionality
+pd.to_datetime()
+pd.to_datetime("2010/11/12", format="%Y/%m/%d")
+pd.to_datetime(1745078400, unit='s')
+pd.to_datetime().timestamp() # use timestamp() to convert to unix timestamp in second
+pd.date_range(start, end, periods, freq)
+friday = pd.Timestamp("2018-01-05")
+saturday = friday + pd.Timedelta("1 day")
+### accessing datetime method
+df.index.hour
+ds.dt.hour
+df.dt.tz_localize().tz_convert()
+### resample(freq, closed='left'/'right', label='left'/'right') # label specifies whether the result is labeled with the beginning or the end of the interval.
+ts.resample("2H").mean()
+### other time series function
+ts.shift()
+ts.asfreq()
+### a Resampler can be selectively resampled.
+df.resample("3T")['A'].mean()
+df.resample("3T")['A'].agg([np.sum, np.mean, np.std])
+### Different behavior of agg()
+df.resample("3T").agg({"A": ["sum", "std"], "B": ["mean", "std"]}) # return dataframe of multi-level column, ['A','B'] is level 1
+<img src="resample_agg.png" width="75%">
+
 
