@@ -319,12 +319,12 @@ dff.groupby("B").filter(lambda x: len(x) > 2) # only keep filtered group
 dff.groupby("B").filter(lambda x: len(x) > 2, dropna=False) # filtered group will be filled with NA
 ### Flexible apply
 apply can act as a reducer, transformer, or filter function, depending on exactly what is passed to it
+### applied series to dataframe
 def f(group):
     return pd.DataFrame({'original': group,
                          'demeaned': group - group.mean()})
 grouped = df.groupby('A', group_keys=True)['C'] # group_keys=True will include group keys as index for *apply()* function
 grouped.apply(f)
-### applied series to dataframe
 def f(x):
     return pd.Series([x, x ** 2], index=["x", "x^2"])
 s = pd.Series(np.random.rand(5))
