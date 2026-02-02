@@ -33,6 +33,7 @@ df.rename(columns={}, index={})
 
 ## Selection or Setting
 ### selection by label df.loc(), df.at()
+### for slicing, both ends are included
 df.loc[idx[0]] # select one row
 df.loc[:, 'a'] # select one col as Series
 df.loc[:, ['a']] # select one or more columns as DataFrame
@@ -75,6 +76,7 @@ subdtypes(np.generic)
 ## df.describe()
 ## df.info()
 ## df.value_counts()
+# ds.to_frame()
 
 ## Binary Operation df.sub/add/mul/div
 row = df.iloc[1]
