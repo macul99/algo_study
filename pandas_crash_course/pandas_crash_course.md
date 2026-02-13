@@ -20,7 +20,7 @@ pd.DataFrame({'a':1, 'b':[1,2]}, index=[0, 1]) # all 1 for col 'a'
 ### deletion - Columns can be deleted or popped like with a dict
 del df["two"]
 three = df.pop("three")
-### insert new column
+### insert new column, inplace
 df.insert(1, "bar", df["one"]) # 2nd column named 'bar'
 ### assign new column in method chains, always return a new copied dataframe
 df.assign(sepal_ratio=df["SepalWidth"] / df["SepalLength"])
@@ -47,6 +47,11 @@ df.iloc[:, 0] # return a Series
 df.iloc[0:3, 2:5] # slicing
 df.iloc[[1,2], [1,3]]
 df.iloc[0, 1] = df.iat[0, 1]
+
+df.iloc[:2, :3] = 1
+df.iloc[:2, :3] = [1,2,3] # 2 rows of [1,2,3]
+df.iloc[:2, :3] = [[1,2,3],[4,5,6]]
+df.iloc[:2, :3] = [[1],[2]] # will be error
 
 ### Combining positional and label-based indexing
 df.loc[df.index[[0, 2]], 'A']
