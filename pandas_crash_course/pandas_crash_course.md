@@ -115,7 +115,7 @@ df.apply(subtract_and_divide, args=(5,), divide=3)
 ### use Series method
 df.apply(pd.Series.interpolate)
 
-## Aggregation API
+## Aggregation API (No Groupby) - Differet behaviour when used with GroupBy
 ### df.agg(func=None, axis=0, *args, **kwargs)
 ### func can be function or function name string or list of fun/fun_name, same as apply() if using single function
 ### *args, **kwargs are passed to func
@@ -130,7 +130,7 @@ q_25 = partial(pd.Series.quantile, q=0.25)
 q_25.__name__ = "25%"
 df.agg(["count", "mean", "std", "min", q_25, "median", q_75, "max"])
 
-## Transform API
+## Transform API (No Groupby) - Differet behaviour when used with GroupBy
 ### df.transform(func=None, axis=0, *args, **kwargs) - can used with GroupBy
 ### func can be function or function name string or list of fun/fun_name
 ### *args, **kwargs are passed to func
@@ -321,6 +321,14 @@ animals.groupby("kind").agg(
     max_height=("height", "max"),
     average_weight=("weight", np.mean),
 )
+### Groupby Transform
+animals.groupby("kind").transform(
+    lambda x: x.median()
+)
+animals.groupby("kind")['height'].transform(
+    lambda x: x-x.median()
+)
+
 ### Filtration
 dff.groupby("B").filter(lambda x: len(x) > 2) # only keep filtered group
 dff.groupby("B").filter(lambda x: len(x) > 2, dropna=False) # filtered group will be filled with NA
@@ -330,7 +338,7 @@ apply can act as a reducer, transformer, or filter function, depending on exactl
 def f(group):
     return pd.DataFrame({'original': group,
                          'demeaned': group - group.mean()})
-grouped = df.groupby('A', group_keys=True)['C'] # group_keys=True will include group keys as index for *apply()* function
+grouped = df.groupby('A', group_keys=True)['C'] # group_keys=True will include group keys as index for *apply()* function, works for single column only
 grouped.apply(f)
 def f(x):
     return pd.Series([x, x ** 2], index=["x", "x^2"])
