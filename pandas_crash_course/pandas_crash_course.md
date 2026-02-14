@@ -278,6 +278,10 @@ df.pivot(index="C", columns="D", values=["A","B"]) # multilevel column
 pd.pivot_table(df, values="D", index=["B"], columns=["A", "C"], aggfunc=np.sum)
 pd.pivot_table(df, values="D", index=pd.Grouper(freq="M", key="F"), columns="C") # can use *Grouper* for index and columns
 
+### melt
+<img src="pandas_melt.png" width="75%">
+<img src="pandas_melt1.png" width="75%">
+
 ## stack
 ### column name become a column
 <img src="pandas_stack.png" width="75%">
