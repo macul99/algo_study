@@ -114,6 +114,17 @@ def subtract_and_divide(x, sub, divide=1):
 df.apply(subtract_and_divide, args=(5,), divide=3)
 ### use Series method
 df.apply(pd.Series.interpolate)
+### Col agg with multiple rows, can use 'agg' with exact the same results, NOT WORKING for Groupby
+def test1(x):
+    return pd.Series([x.iloc[0] + x.iloc[1], x.iloc[0] - x.iloc[1]], index=['Sum', 'Difference'])
+df.apply(test1,axis=0) # the output will be a df with columns as the original df and two rows of 'Sum' and 'Difference'
+### Row agg with multiple cols, can use 'agg' with exact the same results, NOT WORKING for Groupby
+def test0(x, a=1): # x is a row of df as pandas series
+    return x.iloc[0] + x.iloc[1] + a
+df.apply(test0, a=2, axis=1).to_frame(name='Sum') # output is a series, use to_frame() to convert to df
+def test1(x): # x is a row of df as pandas series
+    return pd.Series([x.iloc[0] + x.iloc[1], x.iloc[0] - x.iloc[1]], index=['Sum', 'Difference'])
+df.apply(test1,axis=1) # output is a df
 
 ## Aggregation API (No Groupby) - Differet behaviour when used with GroupBy
 ### df.agg(func=None, axis=0, *args, **kwargs)
@@ -129,6 +140,19 @@ from functools import partial
 q_25 = partial(pd.Series.quantile, q=0.25)
 q_25.__name__ = "25%"
 df.agg(["count", "mean", "std", "min", q_25, "median", q_75, "max"])
+### Row agg
+df.agg(['sum','mean'],axis=1) # df will have two columns 'sum' and 'mean' with the same number of rows as df
+### Row agg with multiple cols, can use 'apply' with exact the same results, NOT WORKING for Groupby
+def test0(x, a=1): # x is a row of df as pandas series
+    return x.iloc[0] + x.iloc[1] + a
+df.agg(test0, a=2, axis=1).to_frame(name='Sum') # output is a series, use to_frame() to convert to df
+def test1(x): # x is a row of df as pandas series
+    return pd.Series([x.iloc[0] + x.iloc[1], x.iloc[0] - x.iloc[1]], index=['Sum', 'Difference'])
+df.agg(test1,axis=1) # output is a df
+### Col agg with multiple rows, can use 'apply' with exact the same results, NOT WORKING for Groupby
+def test1(x):
+    return pd.Series([x.iloc[0] + x.iloc[1], x.iloc[0] - x.iloc[1]], index=['Sum', 'Difference'])
+df.agg(test1,axis=0) # the output will be a df with columns as the original df and two rows of 'Sum' and 'Difference'
 
 ## Transform API (No Groupby) - Differet behaviour when used with GroupBy
 ### df.transform(func=None, axis=0, *args, **kwargs) - can used with GroupBy
