@@ -167,7 +167,7 @@ df.reindex(['a', 'b'], axis=1)
 for col in df
 for col_name, series in df.items()
 ### Iter rows
-for idx, ds in df.iterrows() # convert row to Series, lower compared to intertuples
+for idx, ds in df.iterrows() # convert row to Series, slower compared to intertuples
 for idx, np-array in df.itertuples() # much faster than iterrows
 
 ## df.drop_duplicates(subset=['a'])
@@ -279,10 +279,12 @@ pd.pivot_table(df, values="D", index=["B"], columns=["A", "C"], aggfunc=np.sum)
 pd.pivot_table(df, values="D", index=pd.Grouper(freq="M", key="F"), columns="C") # can use *Grouper* for index and columns
 
 ### melt
+### works best for single level column and create new index
 <img src="pandas_melt.png" width="75%">
 <img src="pandas_melt1.png" width="75%">
 
 ## stack
+### works best for multi level columns and create multi-level index
 ### column name become a column
 <img src="pandas_stack.png" width="75%">
 df.stack() # need to set index properly first
@@ -311,6 +313,8 @@ df.groupby([pd.Grouper(level=1), "A"])
 df['c'].groupby(df['A']) equivalent to df.groupby['A']['c']
 ### Get a group
 grouped.get_group("bar")
+
+### Groupby agg - mainly works for single col
 ### Group without index for agg
 df.groupby(["A", "B"], as_index=False).sum()
 df.groupby(["A", "B"]).sum().reset_index()
@@ -325,13 +329,40 @@ animals.groupby("kind").agg(
     max_height=("height", "max"),
     average_weight=("weight", np.mean),
 )
-### Groupby Transform
+### Groupby Transform - mainly works on single column
 animals.groupby("kind").transform(
     lambda x: x.median()
 )
 animals.groupby("kind")['height'].transform(
     lambda x: x-x.median()
 )
+
+### Groupby apply - for agg on multiple cols
+import pandas as pd
+
+#### Sample DataFrame
+data = {'Group': ['A', 'B', 'A', 'B', 'A', 'B'],
+        'Value1': [10, 20, 15, 25, 12, 22],
+        'Value2': [1, 2, 3, 4, 5, 6]}
+df = pd.DataFrame(data)
+#### 1. Define a custom function to calculate a new metric (e.g., weighted sum)
+def weighted_sum(group):
+    # Access multiple columns from the group DataFrame
+    result = (group['Value1'] * group['Value2']).sum() / group['Value2'].sum()
+    return pd.Series(result, index=['WeightedSum'])
+#### 2. Apply the function to the grouped object
+# The result will be a Series with the new single output column
+result_series = df.groupby('Group').apply(weighted_sum)
+#### Convert the resulting Series back to a DataFrame and reset the index if needed
+result_df = result_series.reset_index()
+print(result_df)
+
+#### multiple output cols
+def weighted_sum_multiple(group):
+    # Access multiple columns from the group DataFrame
+    result = (group['Value1'] * group['Value2']).sum() / group['Value2'].sum()
+    return pd.Series([result, result], index=['WeightedSum','WeightedSum1']) # index will be new col name
+    
 
 ### Filtration
 dff.groupby("B").filter(lambda x: len(x) > 2) # only keep filtered group
@@ -383,7 +414,7 @@ ts.asfreq()
 ### a Resampler can be selectively resampled.
 df.resample("3T")['A'].mean()
 df.resample("3T")['A'].agg([np.sum, np.mean, np.std])
-### Different behavior of agg()
+### Different behavior of agg() similar to Groupby
 df.resample("3T").agg({"A": ["sum", "std"], "B": ["mean", "std"]}) # return dataframe of multi-level column, ['A','B'] is level 1
 <img src="resample_agg.png" width="75%">
 
