@@ -103,6 +103,14 @@ def a(df, p1) ->; def b(p1, df)->df
 Old style: b(p1='ho', a(df, p1='hi'))
 Recommended: df.pipe(a, p1='hi').pipe((b, "df"), 'ho')
 
+
+# Fundamental Difference of apply(), agg() and transform() between original df and groupby
+## The data passed to agg function of original is a Series for both axis=0/1
+## The data passed to agg function of groupby is a df of a single group, not working on axis=1
+## Groupby only have one dimention to play with
+## For groupby apply: return as Scalar if each column agg single value, return as Series if return multiple cols but single row, 
+### return as dataframe if return multiple cols and multiple rows
+
 ## Row or column-wise function application
 ### df.apply(lambda, axis) # return Series or DataFrame
 df.apply(lambda x: np.mean(x)) # return Series
@@ -153,6 +161,11 @@ df.agg(test1,axis=1) # output is a df
 def test1(x):
     return pd.Series([x.iloc[0] + x.iloc[1], x.iloc[0] - x.iloc[1]], index=['Sum', 'Difference'])
 df.agg(test1,axis=0) # the output will be a df with columns as the original df and two rows of 'Sum' and 'Difference'
+### Series apply to return dataframe
+def f(x):
+    return pd.Series([x, x ** 2], index=["x", "x^2"])
+s = pd.Series(np.random.rand(5))
+ds.apply(f) # return will be a dataframe with 2 columns 'x' and 'x^2'
 
 ## Transform API (No Groupby) - Differet behaviour when used with GroupBy
 ### df.transform(func=None, axis=0, *args, **kwargs) - can used with GroupBy
@@ -387,11 +400,7 @@ def weighted_sum_multiple(group):
     result = (group['Value1'] * group['Value2']).sum() / group['Value2'].sum()
     return pd.Series([result, result], index=['WeightedSum','WeightedSum1']) # index will be new col name
     
-
-### Filtration
-dff.groupby("B").filter(lambda x: len(x) > 2) # only keep filtered group
-dff.groupby("B").filter(lambda x: len(x) > 2, dropna=False) # filtered group will be filled with NA
-### Flexible apply
+## Flexible apply
 apply can act as a reducer, transformer, or filter function, depending on exactly what is passed to it
 ### applied series to dataframe
 def f(group):
@@ -399,10 +408,16 @@ def f(group):
                          'demeaned': group - group.mean()})
 grouped = df.groupby('A', group_keys=True)['C'] # group_keys=True will include group keys as index for *apply()* function, works for single column only
 grouped.apply(f)
-def f(x):
-    return pd.Series([x, x ** 2], index=["x", "x^2"])
-s = pd.Series(np.random.rand(5))
-ds.apply(f) # return will be a dataframe with 2 columns 'x' and 'x^2'
+
+### Groupby Apply for multiple columns and multiple row, return pd.DataFrame
+def test2(x):
+    return pd.DataFrame({'Sum': x.iloc[:,0] + x.iloc[:,1], 'Difference': x.iloc[:,0] - x.iloc[:,1]})
+df.groupby('Group', group_keys=True).apply(test2)
+    
+
+### Filtration
+dff.groupby("B").filter(lambda x: len(x) > 2) # only keep filtered group
+dff.groupby("B").filter(lambda x: len(x) > 2, dropna=False) # filtered group will be filled with NA
 
 
 ## Window Operation
