@@ -439,7 +439,7 @@ pd.to_datetime("2010/11/12", format="%Y/%m/%d")
 pd.to_datetime(1745078400, unit='s')
 pd.to_datetime().timestamp() # use timestamp() to convert to unix timestamp in second
 pd.date_range(start, end, periods, freq)
-friday = pd.Timestamp("2018-01-05")
+friday = pd.Timestamp("2018-01-05") # same as pd.to_datetime("2018-01-05")
 saturday = friday + pd.Timedelta("1 day")
 ### accessing datetime method
 df.index.hour
