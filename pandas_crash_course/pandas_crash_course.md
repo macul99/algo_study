@@ -317,6 +317,7 @@ pd.pivot_table(df, values="D", index=pd.Grouper(freq="M", key="F"), columns="C")
 
 ### melt
 ### works best for single level column and create new index
+### melt(id_vars, value_vars, var_name, value_name)
 <img src="pandas_melt.png" width="75%">
 <img src="pandas_melt1.png" width="75%">
 
@@ -341,6 +342,7 @@ pd.cut([25, 20, 50], bins=c.categories) # Categories type can be used to set bin
 ## Exploding
 df['values'].explode() # return a Series
 df.explode('values') # return a DataFrame
+df.explode(['A','B']) # A and B must have the same number of elements in each row
 
 ## GroupBy - Split-Apply-Combine
 for i, g in df.groupby(['a','b'])
